@@ -4,6 +4,30 @@ import './App.css'
 
 function App() {
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/registro', { // Esta será tu ruta en Vercel
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("¡Registro exitoso! Nos vemos en la UTZAC.");
+        e.target.reset(); // Limpia el formulario
+      } else {
+        alert("Hubo un error al guardar.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   return (
     <div id="root" style={{ 
       backgroundImage: `url(${fachada})`, 
@@ -21,8 +45,8 @@ function App() {
           <h2> Formulario de Pre Registro </h2>
           
           <form 
-            action="http://localhost/dbreact/saveFrom.php"
-            method="POST"
+            onSubmit={handleSubmit} // Usaremos esta función
+            className="was-validated"
             className="was-validated"
           >
             <div className="cajaPregunta">
